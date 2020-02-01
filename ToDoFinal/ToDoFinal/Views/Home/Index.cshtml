@@ -1,0 +1,223 @@
+﻿@model List<ToDoFinal.Models.Category>
+<div class="container-fluid text-center" id="main">
+    <div class="row content" id="main1">
+        <div class="col-sm-2 sidenav" id="listBox">
+            <div class="row " id="basliq">
+                <h3><i class="far fa-check-circle col-sm-2 "></i> MY LİSTS</h3>
+                <hr>
+            </div>
+            <div class="list1">
+
+                <h4>DELETED </h4>
+            </div>
+            <div id="categories">
+                @foreach (var item in Model)
+                {
+                    if (item.isDeleted != true)
+                    {
+                        <div class="list clicklist"><h4 data-name="@item.Name.ToUpper()">@item.Name.ToUpper()</h4><span data-id="@item.Id" class="deleteIon glyphicon glyphicon-remove-circle"></span></div>
+
+                    }
+                }
+            </div>
+        </div>
+        <div id="main2">
+            <div class="tasks col-sm-8 text-left" id="deletedList">
+                <h1>DELETED</h1>
+                <hr>
+                <div class="taskList">
+                    @foreach (var item in Model)
+                    {
+
+                        foreach (var tasks in item.ToDoLists.Where(c => c.CategoryId == item.Id))
+                        {
+                            if (tasks.IsDeleted == true)
+                            {
+                                <div class="task @tasks.CategoryId">
+                                    <div>
+                                        
+                                        <del>@tasks.Tittle</del>
+                                    </div>
+                                  
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+
+
+            </div>
+
+
+            @foreach (var item in Model)
+            {
+                if (item.isDeleted == false)
+                {
+                    <div class="tasks col-sm-6 ml-10" id="@item.Name.ToUpper()" style="display: none;">
+                        <h1>@item.Name.ToUpper()</h1>
+                        <hr>
+                        <div class="taskList">
+
+                            @foreach (var tasks in item.ToDoLists.Where(c => c.CategoryId == item.Id))
+                            {
+                                if (tasks.IsDeleted != true)
+                                {
+                                    <div class="task">
+                                        <div>
+                                            <input type="checkbox" value="">
+                                            <del>@tasks.Tittle</del>
+                                        </div>
+                                        <span class="glyphicon glyphicon-remove-circle del" data-id="@tasks.Id"></span>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="elaveEt">
+                            <input class="form-control col-sm-10" type="text" placeholder="Add Task" id="lg">
+                            <span class="add1 glyphicon glyphicon-upload col-sm-2"></span>
+                        </div>
+                    </div>
+                }
+
+            }
+
+        </div>
+    </div>
+
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $(document).on("click", "#AddNew", function (e) {                
+                e.preventDefault();
+                $.ajax({
+                    url: "/Home/Index",
+                    type: "POST",
+                    data: { "name": $("#newAdd").val() },
+                    success: function (res) {
+                        $("#categories").append(res)
+                        $("#exampleModal").modal('hide')
+                        var nd = document.createElement("div");
+                        nd.setAttribute("class", "tasks col-sm-6 ml-10");
+                        nd.setAttribute("id", $("#newAdd").val().toUpperCase())
+                        var textnd = `<h1>` + $("#newAdd").val().toUpperCase() + '</h1><hr><div class="taskList"></div><div class="elaveEt"><input class="form-control col-sm-10" type="text" placeholder="Add Task" id="lg"><span class="add1 glyphicon glyphicon-upload col-sm-2"></span></div>'
+                        nd.innerHTML = textnd;
+                        nd.style.display = "none";
+                        mainDiv.appendChild(nd);
+                        listName.value = ""
+
+                    }
+                })
+            })
+        
+            $(document).on("click",".clicklist", function () {
+                    findId = $(this).children("h4").text();
+                    $("#main2").children().hide();
+                    $(`#${findId}`).css({ "display": "block" })
+            })
+
+
+            $(document).on("click",".clicklist .deleteIon" ,function () {
+                    findId = $(this).siblings("h4").text();
+                    $("#main2").children(`#${findId}`).remove()
+                    $(this).parent().remove()
+                    $("#deletedList").css({ "display": "block" })
+            })
+            $(document).on("click",".list1" , function () {
+                    if ($("#deletedList").css("display") == "none") {
+                        $("#main2").children().hide()
+                        $("#deletedList").css({ "display": "block" })
+                    }
+                })
+                $(document).on("click", ".deleteIon", function () {
+                    $(this).parent().css("display", "none")
+                    $.ajax({
+                        url: "/Home/DeleteCategory",
+                        type: "Get",
+                        data: { "cid": $(this).attr("data-id") },
+                        success: function () {
+                     
+                             $("#deletedList").css({ "display": "block" })
+                        }
+                    })
+
+                })
+            $(document).on("click", ".deleteIon", function () {
+                var that = this;
+                    $.ajax({
+                        url: "/Home/RemoveToDos",
+                        type: "Get",
+                        data: { "tid": that.getAttribute("data-id") },
+                        success: function () {                            
+                            findId = that.getAttribute("data-id");           
+                            $("#deletedList").css({ "display": "block" })                            
+                            var id = `.${findId}`;
+                            
+                            $(id).css({"display":"none"})                         
+                        }
+                    })
+
+                })
+
+            $(document).on("click", ".add1", function () {
+                    var taskText = $(this).siblings("input").val();
+                    var parentID = $(this).parent().parent().attr("id");
+                    var findCid = $(`#categories .list h4[data-name=${parentID}]`).siblings("span").attr("data-id");
+                    var parentID2 = $(this).parents(".tasks").attr("id");
+                    if (taskText != "" && taskText != " ") {
+
+                        $.ajax({
+                            url: "/Home/AddNewTask",
+                            type: "Post",
+                            dataType: "HTML",
+                            data: {
+                                taskName: taskText,
+                                cid: findCid
+                            },
+
+                            success: function (res) {
+                                var cid = $(`#${parentID2}`)
+                                cid.children(".taskList").append(res);
+                                $(".add1").prev().val("");
+                            }
+                        })
+
+                    }
+                    else {
+                        alert("plesae Add task")
+                    }
+
+            });
+            $(document).on("click", ".del", function () {
+                    $(this).parent().css("display", "none")
+                    $.ajax({
+                        url: "/Home/DeleteToDos",
+                        type: "Get",
+                        data: { "tid": $(this).attr("data-id") },
+                        success: function (res) {
+                            $("#deletedList").children(".taskList").append(res);
+                        }
+                    })
+                })
+
+
+            //$('input[type="checkbox"]').each(function () {
+                $(document).on("click",'input[type="checkbox"]',function () {
+                        $(this).siblings("del").css("text-decoration", "line-through")
+                        $(this).parent().siblings("span").css({ "visibility": "visible" });
+                        if ($(this).prop("checked") == true) {
+                            $(this).siblings("del").css("text-decoration", "line-through")
+                            $(this).parent().siblings("span").css({ "visibility": "visible" });
+                        }
+                        else if ($(this).prop("checked") == false) {
+                            $(this).siblings("del").css("text-decoration", "none")
+                            $(this).parent().siblings(".glyphicon").css("visibility", "hidden")
+
+                        }
+                    });
+                //});
+          
+        });
+    </script>
+
+}

@@ -1,0 +1,8 @@
+﻿@model ToDoFinal.Models.ToDos
+<div class="task @Model.CategoryId">
+    <div>
+        <input type="checkbox" value="">
+        <del>@Model.Tittle</del>
+    </div>
+    <span class="glyphicon glyphicon-remove-circle del" data-id="@Model.Id"></span>
+</div>

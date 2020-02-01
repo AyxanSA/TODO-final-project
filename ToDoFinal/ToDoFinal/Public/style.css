@@ -1,0 +1,149 @@
+    .navbar {
+        margin-bottom: 0;
+        border-radius: 0;
+        background-color: #f1f1f1;
+        border: none;
+      }
+      .navSag .btn{
+        margin: 10px;
+        background-color: #337ab7;
+        color: white !important;
+    }
+      
+      .row.content {height: 450px}
+      .navSag{
+          display: flex;
+      }
+      .nav{
+          display: flex;
+          align-items: center;
+      }
+      .sidenav {
+        padding-top: 20px;
+        background-color: #f1f1f1;
+        min-height: 535px;
+        height: auto;
+        box-shadow:  8px 8px 30px 5px rgba(134, 134, 134, .25);
+        overflow-y: scroll;
+      }
+    #basliq{
+        color:  rgb(26, 152, 224);
+        margin: 40px 0 20px 0;
+        display: flex;
+        font-size: 1.2em;   
+        align-items: center ;
+        justify-content: space-around !important ;
+        align-items: center;
+    }
+    .list{
+       display: flex;
+       justify-content: center;
+       line-height: 1.5em;
+       color: #337ab7;
+       font-size: 1.5em;
+       cursor: pointer;
+    }
+    .list .glyphicon {
+        margin-left: 10px;
+    }
+    .list h4{
+      font-size: 1em;
+    }
+    .list:hover span{
+      visibility: visible;
+    }
+    .list span{
+      line-height: 2;
+      visibility: hidden;
+    }
+    .list1{
+      color: #337ab7;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+    .list1 h4{
+     font-size: 1em;
+    }
+    #deletedList{
+      transition: all 0.2s ease-in-out;
+    }
+    .tasks{
+        margin: 30px;
+        box-shadow:  8px 8px 30px 5px rgba(134, 134, 134, .25);
+        overflow-y: scroll;
+        height: 500px;
+    }
+     #main{
+       position: relative;
+       overflow: hidden;
+     }
+      .sidenav {
+        padding-top: 20px;
+        background-color: #f1f1f1;
+        height: 100%;
+        transition: all 0.2s ease-in-out;
+      }
+    
+      
+      .taskList{
+        width: 85%;
+        justify-content: space-between;
+        color: #337ab7;
+        height: auto;
+      }
+    
+      .task{
+        width: 60%;
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.5em;
+      }
+      .taskList .task del{
+      text-decoration: none;
+      margin-left: 10px;
+      }
+      .taskList span{
+        visibility: hidden;
+        cursor: pointer;
+      }
+      .elaveEt{
+        display: flex;
+        margin: 20px;
+    
+      }
+      .elaveEt span{
+        color: #337ab7;
+        font-size: 1.5em;
+        cursor: pointer;
+      }
+      .elaveEt span:hover{
+        color: tomato;
+      }
+      
+      footer {
+        position: fixed;
+        height: 70px;
+        bottom: 0;
+        width: 100%;
+        background-color: #f1f1f1;
+        color: #337ab7;
+        padding: 15px;
+      }
+      .tasks1{
+        margin: 30px;
+        box-shadow:  8px 8px 30px 5px rgba(134, 134, 134, .25);
+        visibility: hidden;
+        position: absolute;
+        min-height: 300px !important;
+      
+    }
+      
+      @media screen and (max-width: 767px) {
+        .sidenav {
+          height: auto;
+          padding: 15px;
+ 
+        }
+        .row.content {height:auto;} 
+        
+      }
